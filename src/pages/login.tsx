@@ -43,20 +43,25 @@ const Login = () => {
 
   const [login, { data, loading, error }] = useMutation(LOGIN, {
     variables: { username: loginValues?.username, password: loginValues?.password },
+    onCompleted: data => {
+      console.log(data);
+    },
+    onError: error => {
+      console.log(error);
+    },
   });
 
   const handleLogin = useCallback(
     async (values: LoginValues) => {
       setLoginValues(values);
       try {
-        login();
-        console.log("success i guess", data);
+        await login();
       } catch (err) {
         setErrors(true);
         // TODO add alerts and loading spinner
       }
     },
-    [login, data]
+    [login]
   );
 
   return (

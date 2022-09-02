@@ -56,6 +56,12 @@ const Register = () => {
 
   const [register, { data, loading, error }] = useMutation(REGISTER, {
     variables: { username: registerValues?.username, password: registerValues?.password },
+    onCompleted: data => {
+      console.log(data);
+    },
+    onError: error => {
+      console.log(error);
+    },
   });
 
   const handleSubmit = useCallback(
