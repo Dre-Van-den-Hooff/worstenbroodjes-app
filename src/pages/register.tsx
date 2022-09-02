@@ -17,6 +17,7 @@ import { IconUserCircle, IconLock, IconAlertCircle } from "@tabler/icons";
 import { useForm } from "@mantine/form";
 import { RegisterValues } from "../interfaces";
 import { REGISTER } from "../api/user";
+import Page from "../components/page";
 
 const centerStyle = {
   height: "100vh",
@@ -76,56 +77,57 @@ const Register = () => {
   );
 
   return (
-    <form onSubmit={onSubmit(values => handleSubmit(values))}>
-      <Center sx={centerStyle}>
-        <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
-          <Paper shadow="md" p="xl" sx={paperStyle}>
-            <Stack spacing="lg">
-              <Box sx={headingStyle}>
-                <Title>Registreren</Title>
-                <Button compact variant="outline" component={RouteLink} to="/login">
-                  Al een account? Log in
-                </Button>
-              </Box>
-
+    <Page>
+      <form onSubmit={onSubmit(values => handleSubmit(values))}>
+        <Center sx={centerStyle}>
+          <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
+            <Paper shadow="md" p="xl" sx={paperStyle}>
               <Stack spacing="lg">
-                <TextInput
-                  placeholder="gebruikersnaam"
-                  label="Gebruikersnaam"
-                  required
-                  icon={<IconUserCircle size={14} />}
-                  {...getInputProps("username")}
-                />
-                <PasswordInput
-                  label="Password"
-                  required
-                  placeholder="********"
-                  icon={<IconLock size={14} />}
-                  {...getInputProps("password")}
-                />
-                <PasswordInput
-                  label="Herhaal wachtwoord"
-                  required
-                  placeholder="********"
-                  icon={<IconLock size={14} />}
-                  {...getInputProps("confirmPassword")}
-                />
+                <Box sx={headingStyle}>
+                  <Title>Registreren</Title>
+                  <Button compact variant="outline" component={RouteLink} to="/login">
+                    Al een account? Log in
+                  </Button>
+                </Box>
+                <Stack spacing="lg">
+                  <TextInput
+                    placeholder="gebruikersnaam"
+                    label="Gebruikersnaam"
+                    required
+                    icon={<IconUserCircle size={14} />}
+                    {...getInputProps("username")}
+                  />
+                  <PasswordInput
+                    label="Password"
+                    required
+                    placeholder="********"
+                    icon={<IconLock size={14} />}
+                    {...getInputProps("password")}
+                  />
+                  <PasswordInput
+                    label="Herhaal wachtwoord"
+                    required
+                    placeholder="********"
+                    icon={<IconLock size={14} />}
+                    {...getInputProps("confirmPassword")}
+                  />
+                </Stack>
+                <Button type="submit">Registreren</Button>
+                {notificationVisible && (
+                  <Notification
+                    icon={<IconAlertCircle size={16} />}
+                    title="Fout"
+                    color="red"
+                    onClose={() => setNotificationVisible(false)}>
+                    Wachtwoord en herhaal wachtwoord zijn niet hetzelfde!
+                  </Notification>
+                )}
               </Stack>
-              <Button type="submit">Registreren</Button>
-              {notificationVisible && (
-                <Notification
-                  icon={<IconAlertCircle size={16} />}
-                  title="Fout"
-                  color="red"
-                  onClose={() => setNotificationVisible(false)}>
-                  Wachtwoord en herhaal wachtwoord zijn niet hetzelfde!
-                </Notification>
-              )}
-            </Stack>
-          </Paper>
-        </MediaQuery>
-      </Center>
-    </form>
+            </Paper>
+          </MediaQuery>
+        </Center>
+      </form>
+    </Page>
   );
 };
 

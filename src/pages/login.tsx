@@ -6,6 +6,7 @@ import { IconUserCircle, IconLock } from "@tabler/icons";
 import { useForm } from "@mantine/form";
 import { LoginValues } from "../interfaces";
 import { LOGIN } from "../api/user";
+import Page from "../components/page";
 
 const centerStyle = {
   height: "100vh",
@@ -59,39 +60,41 @@ const Login = () => {
   );
 
   return (
-    <form onSubmit={onSubmit(values => handleLogin(values))}>
-      <Center sx={centerStyle}>
-        <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
-          <Paper shadow="md" p="xl" sx={paperStyle}>
-            <Stack spacing="lg">
-              <Box sx={headingStyle}>
-                <Title>Login</Title>
-                <Button compact variant="outline" component={RouteLink} to="/register">
-                  Nog geen account? Registreer hier!
-                </Button>
-              </Box>
+    <Page>
+      <form onSubmit={onSubmit(values => handleLogin(values))}>
+        <Center sx={centerStyle}>
+          <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
+            <Paper shadow="md" p="xl" sx={paperStyle}>
               <Stack spacing="lg">
-                <TextInput
-                  placeholder="gebruikersnaam"
-                  label="Gebruikersnaam"
-                  required
-                  icon={<IconUserCircle size={14} />}
-                  {...getInputProps("username")}
-                />
-                <PasswordInput
-                  label="Wachtwoord"
-                  placeholder="********"
-                  required
-                  icon={<IconLock size={14} />}
-                  {...getInputProps("password")}
-                />
+                <Box sx={headingStyle}>
+                  <Title>Login</Title>
+                  <Button compact variant="outline" component={RouteLink} to="/register">
+                    Nog geen account? Registreer hier!
+                  </Button>
+                </Box>
+                <Stack spacing="lg">
+                  <TextInput
+                    placeholder="gebruikersnaam"
+                    label="Gebruikersnaam"
+                    required
+                    icon={<IconUserCircle size={14} />}
+                    {...getInputProps("username")}
+                  />
+                  <PasswordInput
+                    label="Wachtwoord"
+                    placeholder="********"
+                    required
+                    icon={<IconLock size={14} />}
+                    {...getInputProps("password")}
+                  />
+                </Stack>
+                <Button type="submit">Log in</Button>
               </Stack>
-              <Button type="submit">Log in</Button>
-            </Stack>
-          </Paper>
-        </MediaQuery>
-      </Center>
-    </form>
+            </Paper>
+          </MediaQuery>
+        </Center>
+      </form>
+    </Page>
   );
 };
 

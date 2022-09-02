@@ -1,9 +1,11 @@
-import { MantineProvider, Container } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import { InMemoryCache, ApolloClient, ApolloProvider } from "@apollo/client";
 import { theme } from "./theme";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import Leaderboard from "./pages/leaderboard";
+import Profile from "./pages/profile";
 
 function App() {
   const client = new ApolloClient({ cache: new InMemoryCache(), uri: "http://localhost:4000/graphql" });
@@ -12,12 +14,13 @@ function App() {
     <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
       <ApolloProvider client={client}>
         <Router>
-          <Container sx={{ maxWidth: "1600px" }}>
-            <Routes>
-              <Route element={<Login />} path="/login" />
-              <Route element={<Register />} path="/register" />
-            </Routes>
-          </Container>
+          <Routes>
+            <Route element={<Login />} path="/login" />
+            <Route element={<Register />} path="/register" />
+            <Route element={<Leaderboard />} path="/" />
+            <Route element={<Profile />} path="/profile" />
+            <Route element={<Leaderboard />} path="/leaderboard" />
+          </Routes>
         </Router>
       </ApolloProvider>
     </MantineProvider>
