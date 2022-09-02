@@ -1,13 +1,22 @@
-import { TextInput, PasswordInput, Center, Stack, MediaQuery, Paper, Title, Button, Notification } from "@mantine/core";
+import { useCallback, useState } from "react";
+import { Link as RouteLink } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import {
+  TextInput,
+  PasswordInput,
+  Center,
+  Stack,
+  MediaQuery,
+  Paper,
+  Title,
+  Box,
+  Button,
+  Notification,
+} from "@mantine/core";
 import { IconUserCircle, IconLock, IconAlertCircle } from "@tabler/icons";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
-
-interface RegisterValues {
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
+import { RegisterValues } from "../interfaces";
+import { REGISTER } from "../api/user";
 
 const centerStyle = {
   height: "100vh",
@@ -16,6 +25,12 @@ const centerStyle = {
 const paperStyle = {
   width: "80%",
   maxWidth: "550px",
+};
+
+const headingStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "end",
 };
 
 const Register = () => {
@@ -35,14 +50,30 @@ const Register = () => {
 
   const { onSubmit, getInputProps } = useForm(formOptions);
   const [notificationVisible, setNotificationVisible] = useState(false);
+  const [registerValues, setRegisterValues] = useState<RegisterValues>();
+  const [errors, setErrors] = useState(false);
 
-  const handleSubmit = useCallback((values: RegisterValues) => {
-    if (values.password !== values.confirmPassword) {
-      setNotificationVisible(true);
-      return;
-    }
-    // continue, make connection to api
-  }, []);
+  const [register, { data, loading, error }] = useMutation(REGISTER, {
+    variables: { username: registerValues?.username, password: registerValues?.password },
+  });
+
+  const handleSubmit = useCallback(
+    async (values: RegisterValues) => {
+      if (values.password !== values.confirmPassword) {
+        setNotificationVisible(true);
+        return;
+      }
+      setRegisterValues(values);
+      try {
+        register();
+        //TODO: add success message and log user in
+      } catch (err) {
+        setErrors(true);
+        // TODO: add alerts and loading spinner
+      }
+    },
+    [register]
+  );
 
   return (
     <form onSubmit={onSubmit(values => handleSubmit(values))}>
@@ -50,7 +81,13 @@ const Register = () => {
         <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
           <Paper shadow="md" p="xl" sx={paperStyle}>
             <Stack spacing="lg">
-              <Title>Registreren</Title>
+              <Box sx={headingStyle}>
+                <Title>Registreren</Title>
+                <Button compact variant="outline" component={RouteLink} to="/login">
+                  Al een account? Log in
+                </Button>
+              </Box>
+
               <Stack spacing="lg">
                 <TextInput
                   placeholder="gebruikersnaam"
