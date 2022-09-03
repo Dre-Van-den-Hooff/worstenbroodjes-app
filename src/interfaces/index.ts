@@ -15,3 +15,24 @@ export interface PageProps {
   children: ReactNode;
   withFooter?: boolean;
 }
+
+export interface User {
+  id: string;
+  username: string;
+  stats: Stats;
+}
+
+export interface LeaderboardRowProps {
+  id: string;
+  username: string;
+  stats: Stats;
+}
+
+interface Stats {
+  totalSpent: number;
+  lastPurchase: string;
+  worstenbroodjes: number;
+  pizzas: number;
+  muffins: number;
+  paninis: number;
+}

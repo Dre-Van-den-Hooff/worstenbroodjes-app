@@ -1,12 +1,36 @@
 import { gql } from "@apollo/client";
 
+export const GET_ALL_USERS = gql`
+  query GetALlUsers {
+    getAllUsers {
+      id
+      username
+      stats {
+        totalSpent
+        lastPurchase
+        worstenbroodjes
+        pizzas
+        muffins
+        paninis
+      }
+    }
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       user {
         id
         username
-        stats
+        stats {
+          totalSpent
+          lastPurchase
+          worstenbroodjes
+          pizzas
+          muffins
+          paninis
+        }
       }
       token
     }
@@ -15,10 +39,9 @@ export const LOGIN = gql`
 
 export const REGISTER = gql`
   mutation Register($username: String!, $password: String!) {
-    create(username: $username, password: $password) {
+    registerUser(username: $username, password: $password) {
       id
       username
-      stats
     }
   }
 `;
@@ -28,7 +51,14 @@ export const UPDATE_USERNAME = gql`
     updateName(id: $id, newName: $newName) {
       id
       username
-      stats
+      stats {
+        totalSpent
+        lastPurchase
+        worstenbroodjes
+        pizzas
+        muffins
+        paninis
+      }
     }
   }
 `;

@@ -1,10 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Heading,
   Center,
   FormControl,
   FormLabel,
-  FormErrorMessage,
+  Text,
   Input,
   Button,
   Box,
@@ -12,6 +12,8 @@ import {
   Link,
   VStack,
   ScaleFade,
+  useToast,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Link as RouteLink } from "react-router-dom";
 import { MdOutlineAccountCircle } from "react-icons/md";
@@ -27,10 +29,14 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [registerValues, setRegisterValues] = useState<RegisterValues>();
+
+  const [username, setUsername] = useState<string | undefined>();
+  const [password, setPassword] = useState<string | undefined>();
+  const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
+
+  const toast = useToast();
 
   const [registerUser, { data, loading, error }] = useMutation(REGISTER, {
-    variables: { username: registerValues?.username, password: registerValues?.password },
     onCompleted: data => {
       console.log(data);
     },
@@ -40,19 +46,28 @@ const Register = () => {
   });
 
   const handleRegister = useCallback(
-    async (values: RegisterValues) => {
-      if (values.password !== values.confirmPassword) {
-        // TODO: handle error
+    async (formData: RegisterValues) => {
+      if (formData.password !== formData.confirmPassword) {
+        toast({
+          title: "Fout",
+          description: "Wachtwoord en herhaal wachtwoord komen niet overeen!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
       }
-      setRegisterValues(values);
       try {
-        registerUser();
+        setUsername(formData.username);
+        setPassword(formData.password);
+        registerUser({ variables: { username: username, password: password } });
         // TODO: add success message and log user in
       } catch (err) {
         // TODO: add alerts and loading spinner
+        console.log("catch error", err);
       }
     },
-    [registerUser]
+    [registerUser, toast, username, password]
   );
 
   return (
@@ -70,9 +85,17 @@ const Register = () => {
                   <Input
                     type="text"
                     variant="filled"
+                    value={username}
                     placeholder="gebruikersnaam"
                     {...register("username", { required: "Gebruikersnaam moet ingevuld zijn" })}
                   />
+
+                  {errors.username && (
+                    <Text my="1rem" color="red">
+                      {/* @ts-ignore */}
+                      {errors.username.message}
+                    </Text>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormLabel>Wachtwoord</FormLabel>
@@ -80,8 +103,16 @@ const Register = () => {
                     type="password"
                     variant="filled"
                     placeholder="********"
-                    {...register("password", { required: "Wachtwoord moet ingevuld zijn" })}
+                    {...register("password", {
+                      minLength: { value: 8, message: "Wachtwoord moet minstens 8 karakters bevatten" },
+                    })}
                   />
+                  {errors.password && (
+                    <Text my="1rem" color="red">
+                      {/* @ts-ignore */}
+                      {errors.password.message}
+                    </Text>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormLabel>Herhaal wachtwoord</FormLabel>
@@ -89,15 +120,25 @@ const Register = () => {
                     type="password"
                     variant="filled"
                     placeholder="********"
-                    {...register("confirmPassword", { required: "Dit veld moet ingevuld zijn" })}
+                    {...register("confirmPassword", { required: "Herhaal wachtwoord moet ingevuld zijn" })}
                   />
+                  {errors.confirmPassword && (
+                    <Text my="1rem" color="red">
+                      {/* @ts-ignore */}
+                      {errors.confirmPassword.message}
+                    </Text>
+                  )}
                 </FormControl>
               </VStack>
-              <Flex justifyContent="space-between" alignItems="center">
-                <Button leftIcon={<MdOutlineAccountCircle size="20px" />} bgColor="teal.200" type="submit" width="60%">
+              <Flex justifyContent="space-between" alignItems="center" direction={isSmallerThan600 ? "column" : "row"}>
+                <Button
+                  leftIcon={<MdOutlineAccountCircle size="20px" />}
+                  bgColor="teal.200"
+                  type="submit"
+                  width={isSmallerThan600 ? "100%" : "60%"}>
                   Account maken
                 </Button>
-                <Link color="blue" as={RouteLink} to="/login">
+                <Link color="blue" as={RouteLink} to="/login" mt={isSmallerThan600 ? "1rem" : "0"}>
                   Ik heb al een account
                 </Link>
               </Flex>

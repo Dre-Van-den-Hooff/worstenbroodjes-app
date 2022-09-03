@@ -4,7 +4,7 @@ import {
   Center,
   FormControl,
   FormLabel,
-  FormErrorMessage,
+  Text,
   Input,
   Box,
   Flex,
@@ -12,6 +12,7 @@ import {
   Button,
   VStack,
   ScaleFade,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Link as RouteLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +24,9 @@ import { FiLogIn } from "react-icons/fi";
 import Page from "../components/page";
 
 const Login = () => {
-  const [loginValues, setLoginValues] = useState<LoginValues>();
+  const [username, setUsername] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
   const navigate = useNavigate();
 
   const {
@@ -33,9 +36,8 @@ const Login = () => {
   } = useForm();
 
   const [login, { data, loading, error }] = useMutation(LOGIN, {
-    variables: { username: loginValues?.username, password: loginValues?.password },
     onCompleted: data => {
-      console.log(data);
+      navigate("/leaderboard");
     },
     onError: error => {
       console.log(error);
@@ -44,15 +46,15 @@ const Login = () => {
 
   const handleLogin = useCallback(
     async (formData: LoginValues) => {
-      setLoginValues(formData);
       try {
-        await login();
-        navigate("/leaderboard");
+        setUsername(formData.username);
+        setPassword(formData.password);
+        login({ variables: { username: username, password: password } });
       } catch (err) {
         // TODO add toasts and loading spinner
       }
     },
-    [login, navigate]
+    [login, username, password]
   );
 
   return (
@@ -73,6 +75,12 @@ const Login = () => {
                     placeholder="gebruikersnaam"
                     {...register("username", { required: "Gebruikersnaam moet ingevuld zijn" })}
                   />
+                  {errors.username && (
+                    <Text my="1rem" color="red">
+                      {/* @ts-ignore */}
+                      {errors.username.message}
+                    </Text>
+                  )}
                 </FormControl>
                 <FormControl>
                   <FormLabel>Wachtwoord</FormLabel>
@@ -82,18 +90,24 @@ const Login = () => {
                     placeholder="********"
                     {...register("password", { required: "Wachtwoord moet ingevuld zijn" })}
                   />
+                  {errors.password && (
+                    <Text my="1rem" color="red">
+                      {/* @ts-ignore */}
+                      {errors.password.message}
+                    </Text>
+                  )}
                 </FormControl>
               </VStack>
-              <Flex justifyContent="space-between" alignItems="center">
+              <Flex justifyContent="space-between" alignItems="center" direction={isSmallerThan600 ? "column" : "row"}>
                 <Button
                   aria-label="login"
                   bgColor="teal.200"
                   leftIcon={<FiLogIn size="20px" />}
                   type="submit"
-                  width="60%">
+                  width={isSmallerThan600 ? "100%" : "60%"}>
                   Inloggen
                 </Button>
-                <Link color="blue" as={RouteLink} to="/register">
+                <Link color="blue" as={RouteLink} to="/register" mt={isSmallerThan600 ? "1rem" : "0"}>
                   Ik heb nog geen account
                 </Link>
               </Flex>

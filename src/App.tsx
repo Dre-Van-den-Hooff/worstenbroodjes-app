@@ -11,8 +11,8 @@ function App() {
   const client = new ApolloClient({ cache: new InMemoryCache(), uri: "http://localhost:4000/graphql" });
 
   return (
-    <ChakraProvider theme={theme}>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <ChakraProvider theme={theme}>
         <Router>
           <Routes>
             <Route element={<Login />} path="/login" />
@@ -22,8 +22,8 @@ function App() {
             <Route element={<Leaderboard />} path="/leaderboard" />
           </Routes>
         </Router>
-      </ApolloProvider>
-    </ChakraProvider>
+      </ChakraProvider>
+    </ApolloProvider>
   );
 }
 
