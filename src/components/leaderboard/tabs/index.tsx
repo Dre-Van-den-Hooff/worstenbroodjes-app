@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Tabs, TabList, TabPanels, TabPanel, Tab } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
@@ -19,60 +19,48 @@ const TabsMenu = () => {
     },
   });
 
-  const getSortedRanking = useCallback(() => {
-    console.log("IN RANKS");
-    if (userList !== undefined) {
-      console.log("IN SWITCH");
-      switch (tabIndex) {
-        case 0: {
-          const sorted = userList.sort((a, b) => b.stats.worstenbroodjes - a.stats.worstenbroodjes);
-          setUserList([...sorted]);
-          break;
-        }
-        case 1: {
-          const sorted = userList.sort((a, b) => b.stats.pizzas - a.stats.pizzas);
-          setUserList([...sorted]);
-          break;
-        }
-        case 3: {
-          const sorted = userList.sort((a, b) => b.stats.paninis - a.stats.paninis);
-          setUserList([...sorted]);
-          break;
-        }
-        default: {
-          //TODO: Error handling
+  const sortedBy = useCallback(
+    (food: string) => {
+      if (userList !== undefined) {
+        switch (food) {
+          case "worstenbroodje": {
+            return [...userList].sort((a, b) => b.stats.worstenbroodjes - a.stats.worstenbroodjes);
+          }
+          case "panini": {
+            return [...userList].sort((a, b) => b.stats.paninis - a.stats.paninis);
+          }
+          case "pizza": {
+            return [...userList].sort((a, b) => b.stats.pizzas - a.stats.pizzas);
+          }
+          default: {
+            //TODO: error handling or something
+          }
         }
       }
-    } else {
-      //TODO: Error handling
-    }
-  }, [userList, tabIndex]);
-
-  useEffect(() => {
-    console.log("first");
-    getSortedRanking();
-  }, [getSortedRanking, userList]);
+    },
+    [userList]
+  );
 
   return (
     <Tabs variant="soft-rounded" onChange={index => setTabIndex(index)}>
       <TabList>
-        <Tab>worstenbroodjes</Tab>
-        <Tab>pizzas</Tab>
-        <Tab>paninis</Tab>
+        <Tab>Worstenbroodjes</Tab>
+        <Tab>Pizza's</Tab>
+        <Tab>Panini's</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          {userList?.map(user => (
+          {sortedBy("worstenbroodje")?.map(user => (
             <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
           ))}
         </TabPanel>
         <TabPanel>
-          {userList?.map(user => (
+          {sortedBy("pizza")?.map(user => (
             <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
           ))}
         </TabPanel>
         <TabPanel>
-          {userList?.map(user => (
+          {sortedBy("panini")?.map(user => (
             <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
           ))}
         </TabPanel>
