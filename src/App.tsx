@@ -1,6 +1,6 @@
-import { MantineProvider } from "@mantine/core";
+import { ChakraProvider } from "@chakra-ui/react";
 import { InMemoryCache, ApolloClient, ApolloProvider } from "@apollo/client";
-import { theme } from "./theme";
+import theme from "./theme";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -11,7 +11,7 @@ function App() {
   const client = new ApolloClient({ cache: new InMemoryCache(), uri: "http://localhost:4000/graphql" });
 
   return (
-    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+    <ChakraProvider theme={theme}>
       <ApolloProvider client={client}>
         <Router>
           <Routes>
@@ -23,7 +23,7 @@ function App() {
           </Routes>
         </Router>
       </ApolloProvider>
-    </MantineProvider>
+    </ChakraProvider>
   );
 }
 

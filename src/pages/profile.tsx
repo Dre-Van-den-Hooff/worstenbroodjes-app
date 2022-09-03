@@ -2,7 +2,7 @@ import Page from "../components/page";
 
 const Profile = () => {
   return (
-    <Page>
+    <Page withFooter>
       <p>profile page</p>
     </Page>
   );

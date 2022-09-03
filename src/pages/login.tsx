@@ -1,45 +1,36 @@
 import { useCallback, useState } from "react";
+import {
+  Heading,
+  Center,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  Box,
+  Flex,
+  Link,
+  Button,
+  VStack,
+  ScaleFade,
+} from "@chakra-ui/react";
 import { Link as RouteLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { TextInput, Box, PasswordInput, Center, Stack, MediaQuery, Paper, Title, Button } from "@mantine/core";
-import { IconUserCircle, IconLock } from "@tabler/icons";
-import { useForm } from "@mantine/form";
 import { LoginValues } from "../interfaces";
 import { LOGIN } from "../api/user";
+import { useForm } from "react-hook-form";
+import { FiLogIn } from "react-icons/fi";
 import Page from "../components/page";
 
-const centerStyle = {
-  height: "100vh",
-};
-
-const paperStyle = {
-  width: "80%",
-  maxWidth: "550px",
-};
-
-const headingStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "end",
-};
-
 const Login = () => {
-  const formOptions = {
-    initialValues: {
-      username: "",
-      password: "",
-    },
-
-    validate: {
-      username: (value: string) => (value !== "" ? null : "Username moet ingevuld zijn"),
-      password: (value: string) => (value !== "" ? null : "Wachtwoord moet ingevuld zijn"),
-    },
-  };
-
-  const { onSubmit, getInputProps } = useForm(formOptions);
-
   const [loginValues, setLoginValues] = useState<LoginValues>();
-  const [errors, setErrors] = useState(false);
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const [login, { data, loading, error }] = useMutation(LOGIN, {
     variables: { username: loginValues?.username, password: loginValues?.password },
@@ -52,53 +43,64 @@ const Login = () => {
   });
 
   const handleLogin = useCallback(
-    async (values: LoginValues) => {
-      setLoginValues(values);
+    async (formData: LoginValues) => {
+      setLoginValues(formData);
       try {
         await login();
+        navigate("/leaderboard");
       } catch (err) {
-        setErrors(true);
-        // TODO add alerts and loading spinner
+        // TODO add toasts and loading spinner
       }
     },
-    [login]
+    [login, navigate]
   );
 
   return (
     <Page>
-      <form onSubmit={onSubmit(values => handleLogin(values))}>
-        <Center sx={centerStyle}>
-          <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
-            <Paper shadow="md" p="xl" sx={paperStyle}>
-              <Stack spacing="lg">
-                <Box sx={headingStyle}>
-                  <Title>Login</Title>
-                  <Button compact variant="outline" component={RouteLink} to="/register">
-                    Nog geen account? Registreer hier!
-                  </Button>
-                </Box>
-                <Stack spacing="lg">
-                  <TextInput
+      <ScaleFade in={true} initialScale={0.9}>
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <Center height="100vh">
+            <Box maxW="550px" p="2rem" borderRadius="16px" boxShadow="0px 5px 10px hsl(185, 85%, 35%)" width="85%">
+              <Flex>
+                <Heading>Login</Heading>
+              </Flex>
+              <VStack spacing="1.5rem" py="1.5rem">
+                <FormControl>
+                  <FormLabel>Gebruikersnaam</FormLabel>
+                  <Input
+                    type="text"
+                    variant="filled"
                     placeholder="gebruikersnaam"
-                    label="Gebruikersnaam"
-                    required
-                    icon={<IconUserCircle size={14} />}
-                    {...getInputProps("username")}
+                    {...register("username", { required: "Gebruikersnaam moet ingevuld zijn" })}
                   />
-                  <PasswordInput
-                    label="Wachtwoord"
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Wachtwoord</FormLabel>
+                  <Input
+                    type="password"
+                    variant="filled"
                     placeholder="********"
-                    required
-                    icon={<IconLock size={14} />}
-                    {...getInputProps("password")}
+                    {...register("password", { required: "Wachtwoord moet ingevuld zijn" })}
                   />
-                </Stack>
-                <Button type="submit">Log in</Button>
-              </Stack>
-            </Paper>
-          </MediaQuery>
-        </Center>
-      </form>
+                </FormControl>
+              </VStack>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Button
+                  aria-label="login"
+                  bgColor="teal.200"
+                  leftIcon={<FiLogIn size="20px" />}
+                  type="submit"
+                  width="60%">
+                  Inloggen
+                </Button>
+                <Link color="blue" as={RouteLink} to="/register">
+                  Ik heb nog geen account
+                </Link>
+              </Flex>
+            </Box>
+          </Center>
+        </form>
+      </ScaleFade>
     </Page>
   );
 };

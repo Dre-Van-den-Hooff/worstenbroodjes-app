@@ -1,60 +1,35 @@
 import { useCallback, useState } from "react";
-import { Link as RouteLink } from "react-router-dom";
-import { useMutation } from "@apollo/client";
 import {
-  TextInput,
-  PasswordInput,
+  Heading,
   Center,
-  Stack,
-  MediaQuery,
-  Paper,
-  Title,
-  Box,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
   Button,
-  Notification,
-} from "@mantine/core";
-import { IconUserCircle, IconLock, IconAlertCircle } from "@tabler/icons";
-import { useForm } from "@mantine/form";
+  Box,
+  Flex,
+  Link,
+  VStack,
+  ScaleFade,
+} from "@chakra-ui/react";
+import { Link as RouteLink } from "react-router-dom";
+import { MdOutlineAccountCircle } from "react-icons/md";
+import { useMutation } from "@apollo/client";
 import { RegisterValues } from "../interfaces";
 import { REGISTER } from "../api/user";
+import { useForm } from "react-hook-form";
 import Page from "../components/page";
 
-const centerStyle = {
-  height: "100vh",
-};
-
-const paperStyle = {
-  width: "80%",
-  maxWidth: "550px",
-};
-
-const headingStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "end",
-};
-
 const Register = () => {
-  const formOptions = {
-    initialValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-
-    validate: {
-      username: (value: string) => (value !== "" ? null : "Username moet ingevuld zijn"),
-      password: (value: string) => (value !== "" ? null : "Wachtwoord moet ingevuld zijn"),
-      confirmPassword: (value: string) => (value !== "" ? null : "Herhaal wachtwoord moet ingevuld zijn"),
-    },
-  };
-
-  const { onSubmit, getInputProps } = useForm(formOptions);
-  const [notificationVisible, setNotificationVisible] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [registerValues, setRegisterValues] = useState<RegisterValues>();
-  const [errors, setErrors] = useState(false);
 
-  const [register, { data, loading, error }] = useMutation(REGISTER, {
+  const [registerUser, { data, loading, error }] = useMutation(REGISTER, {
     variables: { username: registerValues?.username, password: registerValues?.password },
     onCompleted: data => {
       console.log(data);
@@ -64,75 +39,72 @@ const Register = () => {
     },
   });
 
-  const handleSubmit = useCallback(
+  const handleRegister = useCallback(
     async (values: RegisterValues) => {
       if (values.password !== values.confirmPassword) {
-        setNotificationVisible(true);
-        return;
+        // TODO: handle error
       }
       setRegisterValues(values);
       try {
-        register();
-        //TODO: add success message and log user in
+        registerUser();
+        // TODO: add success message and log user in
       } catch (err) {
-        setErrors(true);
         // TODO: add alerts and loading spinner
       }
     },
-    [register]
+    [registerUser]
   );
 
   return (
     <Page>
-      <form onSubmit={onSubmit(values => handleSubmit(values))}>
-        <Center sx={centerStyle}>
-          <MediaQuery query="(max-width: 600px) and (min-width: 0px)" styles={{ width: "80%" }}>
-            <Paper shadow="md" p="xl" sx={paperStyle}>
-              <Stack spacing="lg">
-                <Box sx={headingStyle}>
-                  <Title>Registreren</Title>
-                  <Button compact variant="outline" component={RouteLink} to="/login">
-                    Al een account? Log in
-                  </Button>
-                </Box>
-                <Stack spacing="lg">
-                  <TextInput
+      <ScaleFade in={true} initialScale={0.9}>
+        <form onSubmit={handleSubmit(handleRegister)}>
+          <Center height="100vh">
+            <Box maxW="550px" p="2rem" borderRadius="16px" boxShadow="0px 5px 10px hsl(185, 85%, 35%)" width="85%">
+              <Flex>
+                <Heading>Registreren</Heading>
+              </Flex>
+              <VStack spacing="1.5rem" py="1.5rem">
+                <FormControl>
+                  <FormLabel>Gebruikersnaam</FormLabel>
+                  <Input
+                    type="text"
+                    variant="filled"
                     placeholder="gebruikersnaam"
-                    label="Gebruikersnaam"
-                    required
-                    icon={<IconUserCircle size={14} />}
-                    {...getInputProps("username")}
+                    {...register("username", { required: "Gebruikersnaam moet ingevuld zijn" })}
                   />
-                  <PasswordInput
-                    label="Password"
-                    required
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Wachtwoord</FormLabel>
+                  <Input
+                    type="password"
+                    variant="filled"
                     placeholder="********"
-                    icon={<IconLock size={14} />}
-                    {...getInputProps("password")}
+                    {...register("password", { required: "Wachtwoord moet ingevuld zijn" })}
                   />
-                  <PasswordInput
-                    label="Herhaal wachtwoord"
-                    required
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Herhaal wachtwoord</FormLabel>
+                  <Input
+                    type="password"
+                    variant="filled"
                     placeholder="********"
-                    icon={<IconLock size={14} />}
-                    {...getInputProps("confirmPassword")}
+                    {...register("confirmPassword", { required: "Dit veld moet ingevuld zijn" })}
                   />
-                </Stack>
-                <Button type="submit">Registreren</Button>
-                {notificationVisible && (
-                  <Notification
-                    icon={<IconAlertCircle size={16} />}
-                    title="Fout"
-                    color="red"
-                    onClose={() => setNotificationVisible(false)}>
-                    Wachtwoord en herhaal wachtwoord zijn niet hetzelfde!
-                  </Notification>
-                )}
-              </Stack>
-            </Paper>
-          </MediaQuery>
-        </Center>
-      </form>
+                </FormControl>
+              </VStack>
+              <Flex justifyContent="space-between" alignItems="center">
+                <Button leftIcon={<MdOutlineAccountCircle size="20px" />} bgColor="teal.200" type="submit" width="60%">
+                  Account maken
+                </Button>
+                <Link color="blue" as={RouteLink} to="/login">
+                  Ik heb al een account
+                </Link>
+              </Flex>
+            </Box>
+          </Center>
+        </form>
+      </ScaleFade>
     </Page>
   );
 };

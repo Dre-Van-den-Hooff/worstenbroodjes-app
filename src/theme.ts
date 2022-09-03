@@ -1,5 +1,9 @@
-import { MantineThemeOverride } from "@mantine/core";
+import { extendTheme } from "@chakra-ui/react";
 
-export const theme: MantineThemeOverride = {
-  colorScheme: "light",
+const config = {
+  initialColorMode: "system",
+  useSystemColorMode: true,
 };
+
+const theme = extendTheme({ config });
+export default theme;

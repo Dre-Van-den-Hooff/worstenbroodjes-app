@@ -1,12 +1,12 @@
-import { Container } from "@mantine/core";
+import { Container } from "@chakra-ui/react";
 import Footer from "./footer";
 import { PageProps } from "../interfaces";
 
-const Page = ({ children }: PageProps) => {
+const Page = ({ children, withFooter }: PageProps) => {
   return (
-    <Container sx={{ maxWidth: "1600px" }}>
+    <Container maxW="1600px">
       {children}
-      <Footer />
+      {withFooter && <Footer />}
     </Container>
   );
 };

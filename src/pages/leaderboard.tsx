@@ -2,7 +2,7 @@ import Page from "../components/page";
 
 const Leaderboard = () => {
   return (
-    <Page>
+    <Page withFooter>
       <p>leaderboard</p>
     </Page>
   );
