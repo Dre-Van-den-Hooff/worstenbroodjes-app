@@ -4,7 +4,7 @@ import { PageProps } from "../interfaces";
 
 const Page = ({ children, withFooter }: PageProps) => {
   return (
-    <Container maxW="1600px">
+    <Container maxW="1600px" p="0rem">
       {children}
       {withFooter && <Footer />}
     </Container>
