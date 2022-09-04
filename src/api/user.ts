@@ -62,3 +62,20 @@ export const UPDATE_USERNAME = gql`
     }
   }
 `;
+
+export const UPDATE_STATS = gql`
+  mutation UpdateUserStats($id: ID!, $stats: StatsInput!) {
+    updateStats(id: $id, stats: $stats) {
+      id
+      username
+      stats {
+        totalSpent
+        lastPurchase
+        worstenbroodjes
+        pizzas
+        muffins
+        paninis
+      }
+    }
+  }
+`;
