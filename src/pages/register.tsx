@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import {
   Heading,
   Center,
@@ -30,8 +30,6 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const [username, setUsername] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
 
   const toast = useToast();
@@ -58,16 +56,14 @@ const Register = () => {
         return;
       }
       try {
-        setUsername(formData.username);
-        setPassword(formData.password);
-        registerUser({ variables: { username: username, password: password } });
+        registerUser({ variables: { username: formData.username, password: formData.password } });
         // TODO: add success message and log user in
       } catch (err) {
         // TODO: add alerts and loading spinner
         console.log("catch error", err);
       }
     },
-    [registerUser, toast, username, password]
+    [registerUser, toast]
   );
 
   return (
@@ -85,7 +81,6 @@ const Register = () => {
                   <Input
                     type="text"
                     variant="filled"
-                    value={username}
                     placeholder="gebruikersnaam"
                     {...register("username", { required: "Gebruikersnaam moet ingevuld zijn" })}
                   />
