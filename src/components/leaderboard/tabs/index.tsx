@@ -1,67 +1,129 @@
 import { useState, useCallback } from "react";
-import { Tabs, TabList, TabPanels, TabPanel, Tab } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Avatar, Text } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
 import { User } from "../../../interfaces";
+
 import LeaderboardRow from "../leaderboardRow";
+import LeaderboardHeading from "./leaderboardHeading";
 
 const TabsMenu = () => {
   const [userList, setUserList] = useState<User[]>();
-  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [food, setFood] = useState<string>("worstenbroodje");
 
   const { loading } = useQuery(GET_ALL_USERS, {
     onCompleted: data => {
       setUserList(data.getAllUsers);
     },
     onError: error => {
-      // TODO: show toast
+      // TODO: error handling: show toast
       console.log(error);
     },
   });
 
-  const sortedBy = useCallback(
+  const handleTabChange = useCallback((tabIndex: number) => {
+    switch (tabIndex) {
+      case 0:
+        setFood("worstenbroodje");
+        break;
+
+      case 1:
+        setFood("pizza");
+        break;
+
+      case 2:
+        setFood("panini");
+        break;
+    }
+  }, []);
+
+  const getSortedBy = useCallback(
     (food: string) => {
       if (userList !== undefined) {
         switch (food) {
-          case "worstenbroodje": {
+          case "worstenbroodje":
             return [...userList].sort((a, b) => b.stats.worstenbroodjes - a.stats.worstenbroodjes);
-          }
-          case "panini": {
+
+          case "panini":
             return [...userList].sort((a, b) => b.stats.paninis - a.stats.paninis);
-          }
-          case "pizza": {
+
+          case "pizza":
             return [...userList].sort((a, b) => b.stats.pizzas - a.stats.pizzas);
-          }
+
           default: {
             //TODO: error handling or something
           }
         }
+      } else {
+        // TODO: error handling when userList is undefined
       }
     },
     [userList]
   );
 
+  const getTopThree = useCallback(
+    (food: string) => {
+      return getSortedBy(food)?.filter((user, index) => index <= 2 ?? user);
+    },
+    [getSortedBy]
+  );
+
   return (
-    <Tabs variant="soft-rounded" onChange={index => setTabIndex(index)}>
-      <TabList>
-        <Tab>Worstenbroodjes</Tab>
-        <Tab>Pizza's</Tab>
-        <Tab>Panini's</Tab>
-      </TabList>
+    <Tabs variant="soft-rounded" onChange={index => handleTabChange(index)} isFitted>
+      <Flex
+        borderBottomRadius="1rem"
+        bgColor="blue.200"
+        pb="10rem"
+        px="1rem"
+        alignItems="center"
+        flexDirection="column">
+        <LeaderboardHeading />
+        <TabList w="100%" bgColor="gray.500" borderRadius="1.2rem">
+          <Tab color="white">Worstenbroodjes</Tab>
+          <Tab color="white">Pizza's</Tab>
+          <Tab color="white">Panini's</Tab>
+        </TabList>
+        <Flex mt="5rem" justifyContent="space-between" w="100%">
+          {getTopThree(food)?.map(user => (
+            <Flex key={user.id} maxW="100px" alignItems="center" flexDirection="column">
+              <Avatar name={user.username} />
+              <Text textAlign="center">{user.username}</Text>
+            </Flex>
+          ))}
+        </Flex>
+      </Flex>
       <TabPanels>
         <TabPanel>
-          {sortedBy("worstenbroodje")?.map(user => (
-            <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
+          {getSortedBy("worstenbroodje")?.map((user, index) => (
+            <LeaderboardRow
+              key={user.id}
+              id={user.id}
+              username={user.username}
+              amount={user.stats.worstenbroodjes}
+              rank={index}
+            />
           ))}
         </TabPanel>
         <TabPanel>
-          {sortedBy("pizza")?.map(user => (
-            <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
+          {getSortedBy("pizza")?.map((user, index) => (
+            <LeaderboardRow
+              key={user.id}
+              id={user.id}
+              username={user.username}
+              amount={user.stats.pizzas}
+              rank={index}
+            />
           ))}
         </TabPanel>
         <TabPanel>
-          {sortedBy("panini")?.map(user => (
-            <LeaderboardRow key={user.id} id={user.id} username={user.username} stats={user.stats} />
+          {getSortedBy("panini")?.map((user, index) => (
+            <LeaderboardRow
+              key={user.id}
+              id={user.id}
+              username={user.username}
+              amount={user.stats.paninis}
+              rank={index}
+            />
           ))}
         </TabPanel>
       </TabPanels>
