@@ -25,7 +25,8 @@ export interface User {
 export interface LeaderboardRowProps {
   id: string;
   username: string;
-  stats: Stats;
+  amount: number;
+  rank: number;
 }
 
 interface Stats {
