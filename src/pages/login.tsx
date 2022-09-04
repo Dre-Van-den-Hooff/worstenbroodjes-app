@@ -22,10 +22,9 @@ import { LOGIN } from "../api/user";
 import { useForm } from "react-hook-form";
 import { FiLogIn } from "react-icons/fi";
 import Page from "../components/page";
+import { useLogin } from "../auth";
 
 const Login = () => {
-  const [username, setUsername] = useState<string>();
-  const [password, setPassword] = useState<string>();
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
   const navigate = useNavigate();
 
@@ -35,8 +34,11 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const loginUser = useLogin();
+
   const [login, { data, loading, error }] = useMutation(LOGIN, {
     onCompleted: data => {
+      loginUser(data.login.user, data.login.token);
       navigate("/leaderboard");
     },
     onError: error => {
@@ -46,15 +48,9 @@ const Login = () => {
 
   const handleLogin = useCallback(
     async (formData: LoginValues) => {
-      try {
-        setUsername(formData.username);
-        setPassword(formData.password);
-        login({ variables: { username: username, password: password } });
-      } catch (err) {
-        // TODO add toasts and loading spinner
-      }
+      login({ variables: { username: formData.username, password: formData.password } });
     },
-    [login, username, password]
+    [login]
   );
 
   return (

@@ -22,6 +22,14 @@ export interface User {
   stats: Stats;
 }
 
+export interface LoggedInUser {
+  user: User;
+  token: string;
+  //TODO: fix types
+  loginUser: (user: User, token: string) => void;
+  logoutUser: () => void;
+}
+
 export interface LeaderboardRowProps {
   id: string;
   username: string;
@@ -36,4 +44,16 @@ interface Stats {
   pizzas: number;
   muffins: number;
   paninis: number;
+}
+
+export interface FoodDrawerProps {
+  //TODO: find correct type
+  btnRef: any;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+export interface AuthProps {
+  children: ReactNode;
 }

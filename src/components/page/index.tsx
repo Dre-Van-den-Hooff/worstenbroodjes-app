@@ -1,6 +1,6 @@
 import { Container } from "@chakra-ui/react";
-import Footer from "./footer";
-import { PageProps } from "../interfaces";
+import Footer from "../footer";
+import { PageProps } from "../../interfaces";
 
 const Page = ({ children, withFooter }: PageProps) => {
   return (

@@ -70,15 +70,9 @@ const TabsMenu = () => {
 
   return (
     <Tabs variant="soft-rounded" onChange={index => handleTabChange(index)} isFitted>
-      <Flex
-        borderBottomRadius="1rem"
-        bgColor="blue.200"
-        pb="10rem"
-        px="1rem"
-        alignItems="center"
-        flexDirection="column">
+      <Flex borderBottomRadius="2rem" bgColor="blue.200" pb="7rem" px="1rem" alignItems="center" flexDirection="column">
         <LeaderboardHeading />
-        <TabList w="100%" bgColor="gray.500" borderRadius="1.2rem">
+        <TabList w="100%" bgColor="gray.500" borderRadius="1.2rem" mt="1rem">
           <Tab color="white">Worstenbroodjes</Tab>
           <Tab color="white">Pizza's</Tab>
           <Tab color="white">Panini's</Tab>
