@@ -93,7 +93,7 @@ const Login = () => {
                   )}
                 </FormControl>
               </VStack>
-              <Flex justifyContent="space-between" alignItems="center" direction={isSmallerThan600 ? "column" : "row"}>
+              <Flex justifyContent="space-between" alignItems="center" direction="column">
                 <Button
                   aria-label="login"
                   bgColor="teal.200"
@@ -108,7 +108,7 @@ const Login = () => {
                   variant="outline"
                   as={RouteLink}
                   to="/register"
-                  mt={isSmallerThan600 ? "1rem" : "0"}
+                  mt="1rem"
                   w={isSmallerThan600 ? "100%" : "60%"}>
                   Account maken
                 </Button>
@@ -118,7 +118,7 @@ const Login = () => {
                   variant="outline"
                   as={RouteLink}
                   to="/leaderboard"
-                  mt={isSmallerThan600 ? "1rem" : "0"}
+                  mt="1rem"
                   w={isSmallerThan600 ? "100%" : "60%"}>
                   Doorgaan zonder in te loggen
                 </Button>
