@@ -4,10 +4,11 @@ import { Text } from "@chakra-ui/react";
 
 const Profile = () => {
   const { user } = useSession();
+
   return (
     <Page withFooter>
       <p>profile page</p>
-      <Text>Welkom {user.username}</Text>
+      {user && <Text>Welkom {user.username}</Text>}
     </Page>
   );
 };

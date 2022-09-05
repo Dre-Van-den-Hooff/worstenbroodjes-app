@@ -13,8 +13,8 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <ChakraProvider theme={theme}>
-        <AuthProvider>
+      <AuthProvider>
+        <ChakraProvider theme={theme}>
           <Router>
             <Routes>
               <Route element={<Login />} path="/login" />
@@ -24,8 +24,8 @@ function App() {
               <Route element={<Leaderboard />} path="/leaderboard" />
             </Routes>
           </Router>
-        </AuthProvider>
-      </ChakraProvider>
+        </ChakraProvider>
+      </AuthProvider>
     </ApolloProvider>
   );
 }

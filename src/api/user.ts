@@ -17,6 +17,23 @@ export const GET_ALL_USERS = gql`
   }
 `;
 
+export const GET_USER_BY_ID = gql`
+  query GetUserById($id: ID!) {
+    getById(id: $id) {
+      id
+      username
+      stats {
+        totalSpent
+        lastPurchase
+        worstenbroodjes
+        pizzas
+        muffins
+        paninis
+      }
+    }
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
