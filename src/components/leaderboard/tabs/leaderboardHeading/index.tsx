@@ -12,7 +12,7 @@ const LeaderboardHeading = () => {
       <FoodDrawer isOpen={isOpen} onOpen={onOpen} onClose={onClose} btnRef={btnRef} />
       <Heading my="1rem">Leaderboard</Heading>
       <Link as={RouteLink} to="/profile">
-        <IconButton aria-label="profile-button" icon={<MdOutlineAccountCircle size="25px" />} bgColor="transparent" />
+        <IconButton aria-label="profile-button" icon={<MdOutlineAccountCircle size="25px" />} variant="ghost" />
       </Link>
     </Flex>
   );

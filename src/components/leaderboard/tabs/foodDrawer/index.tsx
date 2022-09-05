@@ -21,6 +21,7 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { useMutation } from "@apollo/client";
 import { UPDATE_STATS } from "../../../../api/user";
 import { useSession } from "../../../../auth";
+import NotLoggedInAlert from "../../../alert";
 
 const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
   const [selectedFood, setSelectedFood] = useState<string>("worstenbroodje");
@@ -73,7 +74,7 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
       <IconButton
         aria-label="add-food"
         icon={<MdAddShoppingCart size="25px" />}
-        bgColor="transparent"
+        variant="ghost"
         ref={btnRef}
         onClick={onOpen}
       />
@@ -81,32 +82,40 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Voeg aankoop toe</DrawerHeader>
-          <DrawerBody>
-            <VStack spacing="1rem" alignItems="flex-start">
-              <Text>Kies een snack</Text>
-              <Select variant="filled" onChange={e => handleSelectChange(e)}>
-                <option value="worstenbroodje">Worstenbroodje</option>
-                <option value="pizza">Pizza</option>
-                <option value="panini">Panini</option>
-              </Select>
-              <Text>Hoeveel?</Text>
-              <Flex justifyContent="space-between" w="100%">
-                <Input {...getInputProps()} w="70%" variant="filled" />
-                <Button {...getIncrementButtonProps()}>+</Button>
-                <Button {...getDecrementButtonProps()}>-</Button>
-              </Flex>
-            </VStack>
-          </DrawerBody>
-          {successfulUpdate && <Text>Joepie tis succesvol</Text>}
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Annuleren
-            </Button>
-            <Button colorScheme="blue" onClick={handleConfirm}>
-              Bevestigen
-            </Button>
-          </DrawerFooter>
+          {!user ? (
+            <Flex justifyContent="center">
+              <NotLoggedInAlert mt="3rem" mb="2rem" w="90%" />
+            </Flex>
+          ) : (
+            <>
+              <DrawerHeader>Voeg aankoop toe</DrawerHeader>
+              <DrawerBody>
+                <VStack spacing="1rem" alignItems="flex-start">
+                  <Text>Kies een snack</Text>
+                  <Select variant="filled" onChange={e => handleSelectChange(e)}>
+                    <option value="worstenbroodje">Worstenbroodje</option>
+                    <option value="pizza">Pizza</option>
+                    <option value="panini">Panini</option>
+                  </Select>
+                  <Text>Hoeveel?</Text>
+                  <Flex justifyContent="space-between" w="100%">
+                    <Input {...getInputProps()} w="70%" variant="filled" />
+                    <Button {...getIncrementButtonProps()}>+</Button>
+                    <Button {...getDecrementButtonProps()}>-</Button>
+                  </Flex>
+                </VStack>
+              </DrawerBody>
+              {successfulUpdate && <Text>Joepie tis succesvol</Text>}
+              <DrawerFooter>
+                <Button variant="outline" mr={3} onClick={onClose}>
+                  Annuleren
+                </Button>
+                <Button colorScheme="blue" onClick={handleConfirm}>
+                  Bevestigen
+                </Button>
+              </DrawerFooter>
+            </>
+          )}
         </DrawerContent>
       </Drawer>
     </>

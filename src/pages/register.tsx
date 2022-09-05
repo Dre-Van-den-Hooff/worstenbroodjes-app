@@ -9,7 +9,6 @@ import {
   Button,
   Box,
   Flex,
-  Link,
   VStack,
   ScaleFade,
   useToast,
@@ -34,7 +33,7 @@ const Register = () => {
 
   const toast = useToast();
 
-  const [registerUser, { data, loading, error }] = useMutation(REGISTER, {
+  const [registerUser] = useMutation(REGISTER, {
     onCompleted: data => {
       console.log(data);
     },
@@ -133,9 +132,16 @@ const Register = () => {
                   width={isSmallerThan600 ? "100%" : "60%"}>
                   Account maken
                 </Button>
-                <Link color="blue" as={RouteLink} to="/login" mt={isSmallerThan600 ? "1rem" : "0"}>
+                <Button
+                  aria-label="to-login"
+                  color="blue"
+                  variant="outline"
+                  as={RouteLink}
+                  to="/login"
+                  mt={isSmallerThan600 ? "1rem" : "0"}
+                  w={isSmallerThan600 ? "100%" : "60%"}>
                   Ik heb al een account
-                </Link>
+                </Button>
               </Flex>
             </Box>
           </Center>

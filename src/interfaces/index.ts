@@ -26,7 +26,6 @@ export interface LoggedInUser {
   user: User;
   token: string;
   ready: boolean;
-  //TODO: fix types
   loginUser: (user: User, token: string) => void;
   logoutUser: () => void;
 }

@@ -1,15 +1,16 @@
 import Page from "../components/page";
-import { useSession } from "../auth";
-import { Text } from "@chakra-ui/react";
+import { SlideFade } from "@chakra-ui/react";
+import ProfileHeading from "../components/profile/profileHeading";
+import Stats from "../components/profile/stats";
 
 const Profile = () => {
-  const { user } = useSession();
-
   return (
-    <Page withFooter>
-      <p>profile page</p>
-      {user && <Text>Welkom {user.username}</Text>}
-    </Page>
+    <SlideFade in offsetY="-200px">
+      <Page withFooter>
+        <ProfileHeading />
+        <Stats />
+      </Page>
+    </SlideFade>
   );
 };
 

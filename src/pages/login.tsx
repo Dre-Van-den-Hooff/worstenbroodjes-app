@@ -8,7 +8,6 @@ import {
   Input,
   Box,
   Flex,
-  Link,
   Button,
   VStack,
   ScaleFade,
@@ -36,7 +35,7 @@ const Login = () => {
 
   const loginUser = useLogin();
 
-  const [login, { data, loading, error }] = useMutation(LOGIN, {
+  const [login] = useMutation(LOGIN, {
     onCompleted: data => {
       loginUser(data.login.user, data.login.token);
       navigate("/leaderboard");
@@ -100,12 +99,29 @@ const Login = () => {
                   bgColor="teal.200"
                   leftIcon={<FiLogIn size="20px" />}
                   type="submit"
-                  width={isSmallerThan600 ? "100%" : "60%"}>
+                  w={isSmallerThan600 ? "100%" : "60%"}>
                   Inloggen
                 </Button>
-                <Link color="blue" as={RouteLink} to="/register" mt={isSmallerThan600 ? "1rem" : "0"}>
-                  Ik heb nog geen account
-                </Link>
+                <Button
+                  aria-label="to-register"
+                  color="blue"
+                  variant="outline"
+                  as={RouteLink}
+                  to="/register"
+                  mt={isSmallerThan600 ? "1rem" : "0"}
+                  w={isSmallerThan600 ? "100%" : "60%"}>
+                  Account maken
+                </Button>
+                <Button
+                  aria-label="to-leaderboard"
+                  color="blue"
+                  variant="outline"
+                  as={RouteLink}
+                  to="/leaderboard"
+                  mt={isSmallerThan600 ? "1rem" : "0"}
+                  w={isSmallerThan600 ? "100%" : "60%"}>
+                  Doorgaan zonder in te loggen
+                </Button>
               </Flex>
             </Box>
           </Center>
