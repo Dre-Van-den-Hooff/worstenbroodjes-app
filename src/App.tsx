@@ -7,6 +7,7 @@ import Register from "./pages/register";
 import Leaderboard from "./pages/leaderboard";
 import Profile from "./pages/profile";
 import AuthProvider from "./auth";
+import NotFound from "./pages/notFound";
 
 function App() {
   const client = new ApolloClient({ cache: new InMemoryCache(), uri: "http://localhost:4000/graphql" });
@@ -22,6 +23,7 @@ function App() {
               <Route element={<Leaderboard />} path="/" />
               <Route element={<Profile />} path="/profile" />
               <Route element={<Leaderboard />} path="/leaderboard" />
+              <Route element={<NotFound />} path="*" />
             </Routes>
           </Router>
         </ChakraProvider>
