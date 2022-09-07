@@ -10,10 +10,10 @@ const NotLoggedInAlert = ({ mt, mb, w }: AlertProps) => {
       <AlertTitle>Je bent niet ingelogd</AlertTitle>
       <AlertDescription>Log in of maak een account om verder te gaan.</AlertDescription>
       <Flex justifyContent="space-evenly" w="100%" my="2rem">
-        <Button as={RouteLink} to="/login" bgColor="teal" leftIcon={<FiLogIn />}>
+        <Button as={RouteLink} to="/login" bgColor="blue.200" leftIcon={<FiLogIn />}>
           Inloggen
         </Button>
-        <Button as={RouteLink} to="/register" bgColor="teal" leftIcon={<MdOutlineAccountCircle />}>
+        <Button as={RouteLink} to="/register" bgColor="blue.200" leftIcon={<MdOutlineAccountCircle />}>
           Registreren
         </Button>
       </Flex>

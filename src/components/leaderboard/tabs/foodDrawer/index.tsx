@@ -32,7 +32,6 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
 
   const [updateUserStats] = useMutation(UPDATE_STATS, {
     onCompleted: data => {
-      console.log(data);
       setSuccessfulUpdate(true);
     },
     onError: error => {
