@@ -57,3 +57,7 @@ export interface FoodDrawerProps {
 export interface AuthProps {
   children: ReactNode;
 }
+
+export interface UpdateNameValues {
+  newName?: string;
+}
