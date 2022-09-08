@@ -3,14 +3,21 @@ import { SlideFade } from "@chakra-ui/react";
 import ProfileHeading from "../components/profile/profileHeading";
 import Stats from "../components/profile/stats";
 import UpdateUsername from "../components/profile/updateUsername";
+import { useSession } from "../auth";
 
 const Profile = () => {
+  const { user } = useSession();
+
   return (
     <SlideFade in offsetY="-200px">
       <Page withFooter>
         <ProfileHeading />
-        <Stats />
-        <UpdateUsername />
+        {user && (
+          <>
+            <Stats />
+            <UpdateUsername />
+          </>
+        )}
       </Page>
     </SlideFade>
   );

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 export interface LoginValues {
   username?: string;
@@ -60,4 +60,11 @@ export interface AuthProps {
 
 export interface UpdateNameValues {
   newName?: string;
+}
+
+export interface StatProps {
+  title?: string;
+  count: number;
+  middle?: boolean;
+  imageSrc?: string;
 }
