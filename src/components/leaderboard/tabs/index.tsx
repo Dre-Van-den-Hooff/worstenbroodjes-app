@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Avatar, Text } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Avatar, Text, useToast } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
 import { User } from "../../../interfaces";
@@ -11,13 +11,20 @@ const TabsMenu = () => {
   const [userList, setUserList] = useState<User[]>();
   const [food, setFood] = useState<string>("worstenbroodje");
 
-  const { loading } = useQuery(GET_ALL_USERS, {
+  const toast = useToast();
+
+  const { refetch } = useQuery(GET_ALL_USERS, {
     onCompleted: data => {
       setUserList(data.getAllUsers);
     },
-    onError: error => {
-      // TODO: error handling: show toast
-      console.log(error);
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Er ging iets mis bij het ophalen van de leaderboards.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
     },
   });
 
@@ -51,14 +58,18 @@ const TabsMenu = () => {
             return [...userList].sort((a, b) => b.stats.pizzas - a.stats.pizzas);
 
           default: {
-            //TODO: error handling or something
+            toast({
+              title: "Error",
+              description: "Er ging iets mis. Probeer te refreshen.",
+              status: "error",
+              duration: 4000,
+              isClosable: true,
+            });
           }
         }
-      } else {
-        // TODO: error handling when userList is undefined
       }
     },
-    [userList]
+    [userList, toast]
   );
 
   const getTopThree = useCallback(
@@ -71,7 +82,7 @@ const TabsMenu = () => {
   return (
     <Tabs variant="soft-rounded" onChange={index => handleTabChange(index)} isFitted>
       <Flex borderBottomRadius="2rem" bgColor="blue.200" pb="7rem" px="1rem" alignItems="center" flexDirection="column">
-        <LeaderboardHeading />
+        <LeaderboardHeading refetchUsers={refetch} />
         <TabList w="100%" bgColor="gray.500" borderRadius="1.2rem" mt="1rem">
           <Tab color="white">Worstenbroodjes</Tab>
           <Tab color="white">Pizza's</Tab>

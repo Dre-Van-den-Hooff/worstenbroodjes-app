@@ -15,6 +15,7 @@ import {
   VStack,
   useNumberInput,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { FoodDrawerProps } from "../../../../interfaces";
 import { MdAddShoppingCart } from "react-icons/md";
@@ -23,20 +24,32 @@ import { UPDATE_STATS } from "../../../../api/user";
 import { useSession } from "../../../../auth";
 import NotLoggedInAlert from "../../../alert";
 
-const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
+const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef, refetchUsers }: FoodDrawerProps) => {
   const [selectedFood, setSelectedFood] = useState<string>("worstenbroodje");
-  const [amount, setAmount] = useState<number>();
-  const [successfulUpdate, setSuccessfulUpdate] = useState<boolean>(false);
+  const [amount, setAmount] = useState<number>(0);
 
+  const toast = useToast();
   const { user } = useSession();
 
   const [updateUserStats] = useMutation(UPDATE_STATS, {
-    onCompleted: data => {
-      setSuccessfulUpdate(true);
+    onCompleted: () => {
+      toast({
+        title: "Succes",
+        description: "Statistieken zijn bijgewerkt.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+      refetchUsers();
     },
-    onError: error => {
-      //TODO: proper error handling
-      console.log(error);
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Er ging iets mis bij het bijwerken van je statistieken.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
     },
   });
 
@@ -59,14 +72,16 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
     const updatedStats = {
       totalSpent: user.stats.totalSpent,
       lastPurchase: user.stats.lastPurchase,
-      worstenbroodjes: selectedFood === "worstenbroodje" ? amount : user.stats.worstenbroodjes,
-      pizzas: selectedFood === "pizza" ? amount : user.stats.pizzas,
-      muffins: selectedFood === "muffin" ? amount : user.stats.muffins,
-      paninis: selectedFood === "panini" ? amount : user.stats.paninis,
+      worstenbroodjes:
+        selectedFood === "worstenbroodje" ? user.stats.worstenbroodjes + amount : user.stats.worstenbroodjes,
+      pizzas: selectedFood === "pizza" ? user.stats.pizzas + amount : user.stats.pizzas,
+      muffins: selectedFood === "muffin" ? user.stats.muffins + amount : user.stats.muffins,
+      paninis: selectedFood === "panini" ? user.stats.paninis + amount : user.stats.paninis,
     };
 
     updateUserStats({ variables: { id: user.id, stats: updatedStats } });
-  }, [updateUserStats, amount, selectedFood, user]);
+    onClose();
+  }, [updateUserStats, amount, selectedFood, user, onClose]);
 
   return (
     <>
@@ -104,7 +119,6 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef }: FoodDrawerProps) => {
                   </Flex>
                 </VStack>
               </DrawerBody>
-              {successfulUpdate && <Text>Joepie tis succesvol</Text>}
               <DrawerFooter>
                 <Button variant="outline" mr={3} onClick={onClose}>
                   Annuleren

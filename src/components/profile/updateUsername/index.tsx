@@ -1,6 +1,17 @@
 import { useCallback } from "react";
 import { useMutation } from "@apollo/client";
-import { Button, Input, Flex, Collapse, useDisclosure, FormControl, FormLabel, HStack, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  Flex,
+  Collapse,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  HStack,
+  VStack,
+  useToast,
+} from "@chakra-ui/react";
 import { BiRename } from "react-icons/bi";
 import { UPDATE_USERNAME } from "../../../api/user";
 import { useForm } from "react-hook-form";
@@ -10,38 +21,57 @@ import { UpdateNameValues } from "../../../interfaces";
 const UpdateUsername = () => {
   const { user } = useSession();
   const { isOpen, onToggle } = useDisclosure();
+  const toast = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const [updateUsername] = useMutation(UPDATE_USERNAME, {
     onCompleted: () => {
-      //TODO: show completion toast
+      toast({
+        title: "Succes",
+        description: "Gebruikersnaam is bijgewerkt.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
     },
-    onError: error => {
-      console.log(error);
-      //TODO: show error toast
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Er ging iets mis tijdens het bijwerken van je gebruikersnaam. Probeer opnieuw.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
     },
   });
 
   const handleUpdateName = useCallback(
     (formData: UpdateNameValues) => {
       if (formData.newName === undefined || formData.newName === "") {
+        toast({
+          title: "Error",
+          description: "Nieuwe naam mag niet leeg zijn.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
         return;
-        //TODO: Show error toast
       }
 
       if (formData.newName?.length < 3) {
+        toast({
+          title: "Error",
+          description: "Nieuwe naam moet langer zijn dan 3 karakters.",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
         return;
-        //TODO: Show error toast
       }
-
       updateUsername({ variables: { id: user.id, newName: formData.newName } });
     },
-    [updateUsername, user]
+    [updateUsername, user, toast]
   );
 
   return (

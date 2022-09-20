@@ -20,6 +20,7 @@ import { useMutation } from "@apollo/client";
 import { RegisterValues } from "../interfaces";
 import { REGISTER } from "../api/user";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Page from "../components/page";
 
 const Register = () => {
@@ -30,15 +31,28 @@ const Register = () => {
   } = useForm();
 
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
-
+  const navigate = useNavigate();
   const toast = useToast();
 
   const [registerUser] = useMutation(REGISTER, {
-    onCompleted: data => {
-      console.log(data);
+    onCompleted: () => {
+      toast({
+        title: "Succes",
+        description: "Account aangemaakt. Je kan nu inloggen.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+      navigate("/login");
     },
-    onError: error => {
-      console.log(error);
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Er ging iets mis tijdens het registreren. Probeer opnieuw.",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
     },
   });
 
@@ -54,13 +68,7 @@ const Register = () => {
         });
         return;
       }
-      try {
-        registerUser({ variables: { username: formData.username, password: formData.password } });
-        // TODO: add success message and log user in
-      } catch (err) {
-        // TODO: add alerts and loading spinner
-        console.log("catch error", err);
-      }
+      registerUser({ variables: { username: formData.username, password: formData.password } });
     },
     [registerUser, toast]
   );
