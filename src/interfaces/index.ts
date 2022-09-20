@@ -52,6 +52,7 @@ export interface FoodDrawerProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  refetchUsers: () => void;
 }
 
 export interface AuthProps {
@@ -67,4 +68,8 @@ export interface StatProps {
   count: number;
   middle?: boolean;
   imageSrc?: string;
+}
+
+export interface LeaderboardHeadingProps {
+  refetchUsers: () => void;
 }
