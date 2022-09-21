@@ -1,5 +1,6 @@
 import { Flex, Box, Avatar, Text } from "@chakra-ui/react";
 import { useSession } from "../../auth";
+import background from "../../assets/images/bg4.png";
 import ProfileMenu from "./profileMenu";
 import NotLoggedInAlert from "../alert";
 
@@ -7,7 +8,7 @@ const ProfileHeading = () => {
   const { user } = useSession();
 
   return (
-    <Flex borderBottomRadius="2rem" bgColor="blue.200" pb="3rem" px="1rem" alignItems="center" flexDirection="column">
+    <Flex borderBottomRadius="2rem" bgImage={background} pb="3rem" px="1rem" alignItems="center" flexDirection="column">
       <ProfileMenu />
       {!user ? (
         <NotLoggedInAlert mt="2rem" mb="1rem" />

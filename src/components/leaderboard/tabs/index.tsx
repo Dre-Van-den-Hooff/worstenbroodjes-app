@@ -3,7 +3,7 @@ import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Avatar, Text, useToast }
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
 import { User } from "../../../interfaces";
-
+import background from "../../../assets/images/bg4.png";
 import LeaderboardRow from "../leaderboardRow";
 import LeaderboardHeading from "./leaderboardHeading";
 
@@ -81,7 +81,13 @@ const TabsMenu = () => {
 
   return (
     <Tabs variant="soft-rounded" onChange={index => handleTabChange(index)} isFitted>
-      <Flex borderBottomRadius="2rem" bgColor="blue.200" pb="7rem" px="1rem" alignItems="center" flexDirection="column">
+      <Flex
+        borderBottomRadius="2rem"
+        bgImage={background}
+        pb="7rem"
+        px="1rem"
+        alignItems="center"
+        flexDirection="column">
         <LeaderboardHeading refetchUsers={refetch} />
         <TabList w="100%" bgColor="gray.500" borderRadius="1.2rem" mt="1rem">
           <Tab color="white">Worstenbroodjes</Tab>
