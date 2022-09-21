@@ -35,10 +35,10 @@ const UpdateUsername = () => {
         isClosable: true,
       });
     },
-    onError: () => {
+    onError: error => {
       toast({
         title: "Error",
-        description: "Er ging iets mis tijdens het bijwerken van je gebruikersnaam. Probeer opnieuw.",
+        description: `${error.message}`,
         status: "error",
         duration: 4000,
         isClosable: true,

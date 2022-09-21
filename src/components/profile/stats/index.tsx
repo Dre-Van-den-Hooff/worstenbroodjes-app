@@ -10,7 +10,7 @@ const Stats = () => {
 
   return (
     <Box px="1rem">
-      <Heading mb="1rem">Jouw statistieken</Heading>
+      <Heading my="1rem">Jouw statistieken</Heading>
       <Stat title="Worstenbroodjes" count={user.stats.worstenbroodjes} imageSrc={worstenbroodje} />
       <Stat title="Panini's" count={user.stats.paninis} imageSrc={panini} middle />
       <Stat title="Pizza's" count={user.stats.pizzas} imageSrc={pizza} />

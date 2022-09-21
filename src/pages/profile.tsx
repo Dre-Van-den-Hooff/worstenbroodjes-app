@@ -10,7 +10,7 @@ const Profile = () => {
 
   return (
     <SlideFade in offsetY="-200px">
-      <Page withFooter>
+      <Page>
         <ProfileHeading />
         {user && (
           <>

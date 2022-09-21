@@ -5,7 +5,7 @@ import { SlideFade } from "@chakra-ui/react";
 const Leaderboard = () => {
   return (
     <SlideFade in offsetY="-200px">
-      <Page withFooter>
+      <Page>
         <TabsMenu />
       </Page>
     </SlideFade>

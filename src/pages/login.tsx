@@ -12,6 +12,7 @@ import {
   VStack,
   ScaleFade,
   useMediaQuery,
+  useToast,
 } from "@chakra-ui/react";
 import { Link as RouteLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,8 @@ const Login = () => {
   const [isSmallerThan600] = useMediaQuery("(max-width: 600px)");
   const navigate = useNavigate();
 
+  const toast = useToast();
+
   const {
     register,
     handleSubmit,
@@ -41,7 +44,13 @@ const Login = () => {
       navigate("/leaderboard");
     },
     onError: error => {
-      console.log(error);
+      toast({
+        title: "Error",
+        description: `${error.message}`,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
     },
   });
 

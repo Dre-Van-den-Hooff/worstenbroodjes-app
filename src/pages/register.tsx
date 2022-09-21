@@ -45,10 +45,10 @@ const Register = () => {
       });
       navigate("/login");
     },
-    onError: () => {
+    onError: error => {
       toast({
         title: "Error",
-        description: "Er ging iets mis tijdens het registreren. Probeer opnieuw.",
+        description: `${error.message}`,
         status: "error",
         duration: 4000,
         isClosable: true,

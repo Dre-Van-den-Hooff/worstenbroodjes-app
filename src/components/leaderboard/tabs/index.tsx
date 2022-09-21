@@ -1,9 +1,22 @@
-import { useState, useCallback } from "react";
-import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Avatar, Text, useToast } from "@chakra-ui/react";
+import { useState, useCallback, useEffect } from "react";
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  TabPanel,
+  Tab,
+  Flex,
+  Avatar,
+  Text,
+  useToast,
+  Heading,
+  Image,
+} from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
 import { User } from "../../../interfaces";
 import background from "../../../assets/images/bg4.png";
+import crown from "../../../assets/images/crown.png";
 import LeaderboardRow from "../leaderboardRow";
 import LeaderboardHeading from "./leaderboardHeading";
 
@@ -79,12 +92,16 @@ const TabsMenu = () => {
     [getSortedBy]
   );
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <Tabs variant="soft-rounded" onChange={index => handleTabChange(index)} isFitted>
       <Flex
         borderBottomRadius="2rem"
         bgImage={background}
-        pb="7rem"
+        pb="6rem"
         px="1rem"
         alignItems="center"
         flexDirection="column">
@@ -95,10 +112,12 @@ const TabsMenu = () => {
           <Tab color="white">Panini's</Tab>
         </TabList>
         <Flex mt="5rem" justifyContent="space-between" w="100%">
-          {getTopThree(food)?.map(user => (
-            <Flex key={user.id} maxW="100px" alignItems="center" flexDirection="column">
+          {getTopThree(food)?.map((user, index) => (
+            <Flex key={user.id} maxW="100px" minW="70px" alignItems="center" flexDirection="column">
+              {index === 0 && <Image src={crown} alt="crown-image" w="70px" mb="0.2rem" />}
               <Avatar name={user.username} />
               <Text textAlign="center">{user.username}</Text>
+              <Heading>{index + 1}</Heading>
             </Flex>
           ))}
         </Flex>

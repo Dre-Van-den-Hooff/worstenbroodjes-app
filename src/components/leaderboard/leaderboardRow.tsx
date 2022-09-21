@@ -1,5 +1,6 @@
 import { LeaderboardRowProps } from "../../interfaces";
 import { Flex, Text, Center, Avatar } from "@chakra-ui/react";
+import leaderboardbg from "../../assets/images/leaderboardbg.png";
 
 const LeaderboardRow = ({ id, username, amount, rank }: LeaderboardRowProps) => {
   return (
@@ -7,17 +8,19 @@ const LeaderboardRow = ({ id, username, amount, rank }: LeaderboardRowProps) => 
       <Flex
         justifyContent="space-between"
         alignItems="center"
-        maxW="90%"
+        maxW="95%"
         w="100%"
-        bgColor="teal.200"
+        bgImage={leaderboardbg}
         p="0.5rem"
         borderRadius="1rem">
         <Flex alignItems="center">
-          <Text mr="20%">{rank + 1}</Text>
+          <Text mr="20%" fontWeight="bold">
+            {rank + 1}
+          </Text>
           <Avatar name={username} />
         </Flex>
         <Text>{username}</Text>
-        <Text>{amount}</Text>
+        <Text fontWeight="bold">{amount}</Text>
       </Flex>
     </Center>
   );

@@ -15,7 +15,7 @@ const ProfileHeading = () => {
       ) : (
         <Box mt="2rem">
           <Avatar name={user.username} />
-          <Text>{user.username}</Text>
+          <Text textAlign="center">{user.username}</Text>
         </Box>
       )}
     </Flex>
