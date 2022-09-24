@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dre-van-den-hooff.github.io/worstenbroodjes-app/leaderboard",
+  "homepage": "https://dre-van-den-hooff.github.io/worstenbroodjes-app",
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@chakra-ui/react": "^2.3.1",
