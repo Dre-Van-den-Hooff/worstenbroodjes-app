@@ -1,7 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { InMemoryCache, ApolloClient, ApolloProvider } from "@apollo/client";
 import theme from "./theme";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Route, Routes, HashRouter as Router } from "react-router-dom";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Leaderboard from "./pages/leaderboard";
