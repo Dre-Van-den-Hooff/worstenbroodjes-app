@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/worstenbroodjes-app/static/css/main.e6c13ad2.css",
+    "main.js": "/worstenbroodjes-app/static/js/main.5167bd3d.js",
+    "static/js/787.c1112931.chunk.js": "/worstenbroodjes-app/static/js/787.c1112931.chunk.js",
+    "static/media/pizza.png": "/worstenbroodjes-app/static/media/pizza.9f4f40d49c1c59b199db.png",
+    "static/media/leaderboardbg.png": "/worstenbroodjes-app/static/media/leaderboardbg.6256c8a6484c23f8254a.png",
+    "static/media/bg4.png": "/worstenbroodjes-app/static/media/bg4.fd530c0a0cd4219d3e45.png",
+    "static/media/worstenbroodje.png": "/worstenbroodjes-app/static/media/worstenbroodje.f1b29cec5716a8ddf6bc.png",
+    "static/media/crown.png": "/worstenbroodjes-app/static/media/crown.8462a2cb0d0ce42cb87e.png",
+    "static/media/panini.png": "/worstenbroodjes-app/static/media/panini.b3b132fed336cacdd06e.png",
+    "index.html": "/worstenbroodjes-app/index.html",
+    "main.e6c13ad2.css.map": "/worstenbroodjes-app/static/css/main.e6c13ad2.css.map",
+    "main.5167bd3d.js.map": "/worstenbroodjes-app/static/js/main.5167bd3d.js.map",
+    "787.c1112931.chunk.js.map": "/worstenbroodjes-app/static/js/787.c1112931.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.5167bd3d.js"
+  ]
+}
