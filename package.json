@@ -2,6 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://github.com/Dre-Van-den-Hooff/worstenbroodjes-app",
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@chakra-ui/react": "^2.3.1",
