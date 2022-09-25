@@ -10,7 +10,10 @@ import AuthProvider from "./auth";
 import NotFound from "./pages/notFound";
 
 function App() {
-  const client = new ApolloClient({ cache: new InMemoryCache(), uri: "http://localhost:4000/graphql" });
+  const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    uri: "https://worstenbroodjes-api-production.up.railway.app/",
+  });
 
   return (
     <ApolloProvider client={client}>
