@@ -26,7 +26,8 @@ import NotLoggedInAlert from "../../../alert";
 
 const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef, refetchUsers }: FoodDrawerProps) => {
   const [selectedFood, setSelectedFood] = useState<string>("worstenbroodje");
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(1);
+  const [showNegativeAmount, setShowNegativeAmount] = useState<boolean>(false);
 
   const toast = useToast();
   const { user } = useSession();
@@ -55,7 +56,6 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef, refetchUsers }: FoodDrawe
 
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
     step: 1,
-    min: 1,
     defaultValue: 1,
     onChange: value => handleAmountChange(Number(value)),
   });
@@ -69,18 +69,23 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef, refetchUsers }: FoodDrawe
   }, []);
 
   const handleConfirm = useCallback(() => {
-    const updatedStats = {
-      totalSpent: user.stats.totalSpent,
-      lastPurchase: user.stats.lastPurchase,
-      worstenbroodjes:
-        selectedFood === "worstenbroodje" ? user.stats.worstenbroodjes + amount : user.stats.worstenbroodjes,
-      pizzas: selectedFood === "pizza" ? user.stats.pizzas + amount : user.stats.pizzas,
-      muffins: selectedFood === "muffin" ? user.stats.muffins + amount : user.stats.muffins,
-      paninis: selectedFood === "panini" ? user.stats.paninis + amount : user.stats.paninis,
-    };
+    if (amount >= 1) {
+      const updatedStats = {
+        totalSpent: user.stats.totalSpent,
+        lastPurchase: user.stats.lastPurchase,
+        worstenbroodjes:
+          selectedFood === "worstenbroodje" ? user.stats.worstenbroodjes + amount : user.stats.worstenbroodjes,
+        pizzas: selectedFood === "pizza" ? user.stats.pizzas + amount : user.stats.pizzas,
+        muffins: selectedFood === "muffin" ? user.stats.muffins + amount : user.stats.muffins,
+        paninis: selectedFood === "panini" ? user.stats.paninis + amount : user.stats.paninis,
+      };
 
-    updateUserStats({ variables: { id: user.id, stats: updatedStats } });
-    onClose();
+      setShowNegativeAmount(false);
+      updateUserStats({ variables: { id: user.id, stats: updatedStats } });
+      onClose();
+    } else {
+      setShowNegativeAmount(true);
+    }
   }, [updateUserStats, amount, selectedFood, user, onClose]);
 
   return (
@@ -117,6 +122,9 @@ const FoodDrawer = ({ isOpen, onOpen, onClose, btnRef, refetchUsers }: FoodDrawe
                     <Button {...getIncrementButtonProps()}>+</Button>
                     <Button {...getDecrementButtonProps()}>-</Button>
                   </Flex>
+                  {showNegativeAmount && (
+                    <Text color="red">Gelieve geen negative getallen of 0 in te voeren, sloeber</Text>
+                  )}
                 </VStack>
               </DrawerBody>
               <DrawerFooter>
