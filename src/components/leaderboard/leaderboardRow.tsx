@@ -15,7 +15,7 @@ const LeaderboardRow = ({ id, username, amount, rank }: LeaderboardRowProps) => 
         borderRadius="1rem">
         <Flex alignItems="center">
           <Text mr="20%" fontWeight="bold">
-            {rank + 1}
+            {rank + 1}.
           </Text>
           <Avatar name={username} />
         </Flex>

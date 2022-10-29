@@ -3,14 +3,18 @@ import { useMutation } from "@apollo/client";
 import {
   Button,
   Input,
-  Flex,
-  Collapse,
-  useDisclosure,
   FormControl,
   FormLabel,
   HStack,
-  VStack,
   useToast,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  Spacer,
+  Center,
 } from "@chakra-ui/react";
 import { BiRename } from "react-icons/bi";
 import { UPDATE_USERNAME } from "../../../api/user";
@@ -20,7 +24,6 @@ import { UpdateNameValues } from "../../../interfaces";
 
 const UpdateUsername = () => {
   const { user } = useSession();
-  const { isOpen, onToggle } = useDisclosure();
   const toast = useToast();
 
   const { register, handleSubmit } = useForm();
@@ -75,25 +78,29 @@ const UpdateUsername = () => {
   );
 
   return (
-    <Flex flexDirection="column" alignItems="center">
-      <VStack spacing="1rem">
-        <Button leftIcon={<BiRename />} onClick={onToggle}>
-          Verander gebruikersnaam
-        </Button>
-        <Collapse in={isOpen}>
-          <form onSubmit={handleSubmit(handleUpdateName)}>
-            <FormControl>
-              <FormLabel>Nieuwe gebruikersnaam</FormLabel>
-              <Input type="text" variant="filled" {...register("newName")} mb="1rem" />
-            </FormControl>
-            <HStack spacing="1rem">
-              <Button onClick={onToggle}>Annuleren</Button>
-              <Button type="submit">Bevestigen</Button>
-            </HStack>
-          </form>
-        </Collapse>
-      </VStack>
-    </Flex>
+    <Center>
+      <Popover>
+        <PopoverTrigger>
+          <Button leftIcon={<BiRename />}>Verander gebruikersnaam</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverBody>
+            <form onSubmit={handleSubmit(handleUpdateName)}>
+              <FormControl>
+                <FormLabel>Nieuwe gebruikersnaam</FormLabel>
+                <Input type="text" variant="filled" {...register("newName")} mb="1rem" />
+              </FormControl>
+              <HStack spacing="1rem">
+                <Spacer />
+                <Button type="submit">Bevestigen</Button>
+              </HStack>
+            </form>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+    </Center>
   );
 };
 

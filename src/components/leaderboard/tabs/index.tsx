@@ -1,22 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
-  Tab,
-  Flex,
-  Avatar,
-  Text,
-  useToast,
-  Heading,
-  Image,
-} from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, TabPanel, Tab, Flex, Text, useToast, Image } from "@chakra-ui/react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../api/user";
 import { User } from "../../../interfaces";
 import background from "../../../assets/images/bg4.png";
-import crown from "../../../assets/images/crown.png";
+import gold from "../../../assets/images/gold.png";
+import silver from "../../../assets/images/silver.png";
+import bronze from "../../../assets/images/bronze.png";
 import LeaderboardRow from "../leaderboardRow";
 import LeaderboardHeading from "./leaderboardHeading";
 
@@ -114,10 +104,12 @@ const TabsMenu = () => {
         <Flex mt="5rem" justifyContent="space-between" w="100%">
           {getTopThree(food)?.map((user, index) => (
             <Flex key={user.id} maxW="100px" minW="70px" alignItems="center" flexDirection="column">
-              {index === 0 && <Image src={crown} alt="crown-image" w="70px" mb="0.2rem" />}
-              <Avatar name={user.username} />
-              <Text textAlign="center">{user.username}</Text>
-              <Heading>{index + 1}</Heading>
+              {index === 0 && <Image src={gold} alt="gold-medal" w="80px" mb="0.2rem" />}
+              {index === 1 && <Image src={silver} alt="silver-medal" w="80px" mb="0.2rem" />}
+              {index === 2 && <Image src={bronze} alt="bronze-medal" w="80px" mb="0.2rem" />}
+              <Text textAlign="center" fontWeight="bold">
+                {user.username}
+              </Text>
             </Flex>
           ))}
         </Flex>
